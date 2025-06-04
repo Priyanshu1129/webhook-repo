@@ -1,14 +1,17 @@
-```markdown
 # Webhook Client (React)
 
-This React frontend polls the backend every 15 seconds to display GitHub webhook events such as `push`, `pull_request`, and `merge` in a clean format.
-Only fetch the new events and maintain history of events on frontend until page not refreshed. Also ensure no re-displaying of same notification.
+This React frontend polls the backend every 15 seconds to display GitHub webhook events such as `push`, `pull_request`, and `merge` in a clean, real-time feed.
+
+It receives only **new events**, maintains a **local event history** (until page refresh), and ensures **no duplicate notifications** are displayed.
+
+---
 
 ## 🎯 Features
 
 - Polls backend `/webhook/notifications` every 15 seconds
 - Displays real-time GitHub activity updates
-- Clean and minimal UI with React + Tailwind CSS
+- Clean and minimal UI using React + Tailwind CSS
+- Stores new events locally to avoid re-displaying the same notifications
 
 ---
 
@@ -20,6 +23,8 @@ Only fetch the new events and maintain history of events on frontend until page 
 cd webhook/webhook-client
 ````
 
+---
+
 ### 2. Install dependencies
 
 ```bash
@@ -30,7 +35,7 @@ npm install
 
 ### 3. Update Backend API URL (if using Ngrok)
 
-By default, the frontend fetches data from:
+By default, the frontend fetches from:
 
 ```js
 http://localhost:5000/webhook/notifications
@@ -38,10 +43,10 @@ http://localhost:5000/webhook/notifications
 
 If you're using Ngrok, replace it with your public URL:
 
-In `src/App.jsx` or wherever the API call is defined:
+In `src/App.jsx` (or the file where the fetch call is made):
 
 ```js
-const API_URL = "https://your-ngrok-url/webhook/notifications";
+const API_URL = "https://abc.ngrok-free.app/webhook/notifications";
 ```
 
 ---
@@ -52,13 +57,17 @@ const API_URL = "https://your-ngrok-url/webhook/notifications";
 npm run dev
 ```
 
-The app will be available at `http://localhost:5173` (or similar).
+The app will typically run at:
+
+```
+http://localhost:5173
+```
 
 ---
 
 ## 🧪 Output Format in UI
 
-Displayed formats for GitHub events:
+Sample display formats for GitHub events:
 
 * `"Travis" pushed to "staging" on 1st April 2021 - 9:30 PM UTC`
 * `"Travis" submitted a pull request from "staging" to "master" on 1st April 2021 - 9:00 AM UTC`
@@ -68,20 +77,20 @@ Displayed formats for GitHub events:
 
 ## 🔁 Polling Strategy
 
-The app uses a 15-second polling interval to fetch only new events:
+The frontend polls this endpoint every 15 seconds:
 
-```
+```http
 GET /webhook/notifications
 ```
+
+It only adds **new events** based on time and content to avoid duplicates.
 
 ---
 
 ## ✅ Summary
 
-* React frontend with periodic data polling
-* Displays GitHub webhook activity live
-* Works with the Flask backend exposed via Ngrok
+* React frontend with real-time GitHub webhook updates
+* Periodic polling of Flask backend
+* Works seamlessly with Flask server exposed via Ngrok
 
----
 
-```
